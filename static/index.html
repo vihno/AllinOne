@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel=stylesheet href="style.css">
+  
+  <title>Vinho – Rencontre entre amis</title>
+
+</head>
+<body>
+<header>
+  <div class="logo">VINHO</div>
+  <p>Rencontre entre amis ⚽❤️</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>🤝 Rencontre entre amis</h2>
+    <p class="intro">
+      Bienvenue à la rencontre organisée par <strong>Vinho</strong>.
+      Venez partager un bon moment entre amis autour du football,
+      de la bonne ambiance et du rafraîchissement.
+    </p>
+    <div class="price" id="priceDisplay">Garçons : 2 500 FCFA<br>Filles : 1 500 FCFA</div>
+    <p style="text-align:center">La participation comprend le <strong>maillot</strong> et le <strong>rafraîchissement</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>💳 Paiement TMoney</h2>
+    <p>Le montant dépend de ta catégorie : <strong>Garçons = 2 500 FCFA</strong> et <strong>Filles = 1 500 FCFA</strong>.<br><br>Effectue ton paiement après avoir choisi ta catégorie :</p>
+
+    <div class="tmoney">
+      <div>Numéro TMoney</div>
+      <div class="tmoney-number">70 07 21 41</div>
+      <div>TMoney</div>
+    </div>
+
+    <div class="step"><div class="number">1</div><div>Ouvre ton service TMoney.</div></div>
+    <div class="step"><div class="number">2</div><div>Envoie le montant correspondant à ta catégorie au <strong>70 07 21 41</strong>.</div></div>
+    <div class="step"><div class="number">3</div><div>Après le paiement, récupère la <strong>référence de transaction</strong>.</div></div>
+    <div class="step"><div class="number">4</div><div>Remplis le formulaire ci-dessous et envoie ton inscription sur WhatsApp.</div></div>
+
+    <div class="warning">
+      ⚠️ Le paiement est vérifié manuellement par l'organisation.
+      Ton inscription sera considérée comme confirmée après vérification.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 Inscription</h2>
+
+    <form id="registrationForm">
+      <label for="nom">Nom *</label>
+      <input id="nom" required placeholder="Ton nom">
+
+      <label for="prenom">Prénom *</label>
+      <input id="prenom" required placeholder="Ton prénom">
+
+      <label for="telephone">Numéro de téléphone *</label>
+      <input id="telephone" type="tel" required placeholder="Ex : 90 00 00 00">
+
+      <label for="sexe">Catégorie *</label>
+      <select id="sexe" required>
+        <option value="">Choisir</option>
+        <option>Garçon</option>
+        <option>Fille</option>
+      </select>
+
+      <div id="selectedPrice" style="display:none;margin-top:15px;padding:14px;background:#ecfdf5;color:#166534;border-radius:10px;font-weight:bold;text-align:center;"></div>
+
+      <label for="taille">Taille du maillot *</label>
+      <select id="taille" required>
+        <option value="">Choisir une taille</option>
+        <option>XS</option><option>S</option><option>M</option>
+        <option>L</option><option>XL</option><option>XXL</option>
+      </select>
+
+      <label for="reference">Référence du paiement TMoney *</label>
+      <input id="reference" required placeholder="Référence reçue après le paiement">
+
+      <button type="submit">📲 Envoyer mon inscription sur WhatsApp</button>
+      <p class="small">Après le clic, WhatsApp s'ouvrira avec ton message d'inscription déjà préparé. Vérifie-le puis appuie sur « Envoyer ».</p>
+    </form>
+
+    <div class="success" id="successMessage">
+      <strong>🎉 Inscription préparée !</strong><br><br>
+      WhatsApp a été ouvert avec les informations de ton inscription.
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 Vinho – Rencontre entre amis<br>
+  Ensemble • Sport • Amitié ❤️
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
