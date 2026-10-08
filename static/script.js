@@ -11,14 +11,13 @@
 let CONFIG = {
   whatsapp_number: "22870072141",
   tmoney_number: "70 07 21 41",
-  prix: { "Garçon": 2500, "Fille": 1500 }
+  prix: { "Garçon": 2000, "Fille": 1500 }
 };
 
 const API_URL = "/api/inscriptions";
 
 // Éléments du DOM
 const form = document.getElementById("registrationForm");
-const nomInput = document.getElementById("nom");
 const prenomInput = document.getElementById("prenom");
 const telInput = document.getElementById("telephone");
 const sexeSelect = document.getElementById("sexe");
@@ -88,7 +87,7 @@ function buildWhatsAppUrl(data, montant) {
   const message = [
     "⚽ *INSCRIPTION OFFICIELLE – VINHO FC*",
     "--------------------------------",
-    `👤 *Nom & Prénom :* ${data.nom.toUpperCase()} ${data.prenom}`,
+    `👤 *Prénom :* ${data.prenom.toUpperCase()}`,
     `📞 *Téléphone :* ${data.telephone}`,
     `🚻 *Équipe :* ${data.sexe}`,
     `👕 *Taille Maillot :* ${data.taille}`,
@@ -105,18 +104,10 @@ function buildWhatsAppUrl(data, montant) {
 /* ---------- Prévisualisation interactive du Maillot ---------- */
 
 function updateJerseyFlocking() {
-  const nom = nomInput.value.trim().toUpperCase();
-  const prenom = prenomInput.value.trim();
-
-  if (nom || prenom) {
-    const initial = prenom ? `${prenom.charAt(0).toUpperCase()}. ` : "";
-    jerseyName.textContent = (initial + nom) || nom || "TON NOM";
-  } else {
-    jerseyName.textContent = "TON NOM";
-  }
+  const prenom = prenomInput.value.trim().toUpperCase();
+  jerseyName.textContent = prenom || "TON PRÉNOM";
 }
 
-nomInput.addEventListener("input", updateJerseyFlocking);
 prenomInput.addEventListener("input", updateJerseyFlocking);
 
 sexeSelect.addEventListener("change", () => {
@@ -181,7 +172,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const data = {
-    nom: nomInput.value.trim(),
+    nom: "",
     prenom: prenomInput.value.trim(),
     telephone: telInput.value.trim(),
     sexe: sexeSelect.value,
@@ -256,7 +247,7 @@ form.addEventListener("submit", async (event) => {
   const waUrl = buildWhatsAppUrl(data, montant);
 
   // Remplissage du pass de match dans la modal
-  passPlayerName.textContent = `${data.nom.toUpperCase()} ${data.prenom}`;
+  passPlayerName.textContent = data.prenom.toUpperCase();
   passJerseyInfo.textContent = `${data.taille} (${data.sexe})`;
   passReference.textContent = data.reference;
   passMontant.textContent = formatFCFA(montant);
@@ -280,7 +271,7 @@ modalCloseBtn.addEventListener("click", () => {
   successModal.classList.remove("active");
   form.reset();
   priceBanner.style.display = "none";
-  jerseyName.textContent = "TON NOM";
+  jerseyName.textContent = "TON PRÉNOM";
   jerseySizeBadge.textContent = "TAILLE M";
   jerseyObject.classList.remove("jersey-girl");
   jerseyTeamBadge.textContent = "VINHO HOME KIT (HOMMES)";

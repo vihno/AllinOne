@@ -43,7 +43,7 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "vinho123")
 WHATSAPP_NUMBER = os.environ.get("WHATSAPP_NUMBER", "22870072141")
 TMONEY_NUMBER = os.environ.get("TMONEY_NUMBER", "70 07 21 41")
 
-PRIX = {"Garçon": 2500, "Fille": 1500}
+PRIX = {"Garçon": 2000, "Fille": 1500}
 TAILLES = {"XS", "S", "M", "L", "XL", "XXL"}
 STATUTS = {"attente", "confirme"}
 
@@ -191,15 +191,15 @@ def api_config():
 def create_inscription():
     data = request.get_json(silent=True) or {}
 
-    nom = clean(data.get("nom"))
+    nom = clean(data.get("nom", ""))
     prenom = clean(data.get("prenom"))
     sexe = clean(data.get("sexe"), 10)
     taille = clean(data.get("taille"), 5)
     reference = clean(data.get("reference"), 60)
     telephone = normalize_phone(data.get("telephone"))
 
-    if not nom or not prenom:
-        return jsonify(error="Le nom et le prénom sont obligatoires."), 400
+    if not prenom:
+        return jsonify(error="Le prénom est obligatoire."), 400
     if not telephone:
         return jsonify(error="Numéro de téléphone invalide (8 chiffres togolais requis)."), 400
     if sexe not in PRIX:

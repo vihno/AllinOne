@@ -89,13 +89,12 @@
 
       <form id="addForm" class="add-player-form">
         <div class="form-grid">
-          <input id="nom" placeholder="Nom de famille" aria-label="Nom" autocomplete="off" required>
-          <input id="prenom" placeholder="Prénom" aria-label="Prénom" autocomplete="off" required>
+          <input id="prenom" placeholder="Prénom du joueur" aria-label="Prénom" autocomplete="off" required>
           <input id="telephone" type="tel" placeholder="Téléphone (8 chiffres)" aria-label="Téléphone" autocomplete="off" required>
 
           <select id="sexe" aria-label="Catégorie" required>
             <option value="">Sélectionner Catégorie</option>
-            <option value="Garçon">Garçon (2 500 FCFA)</option>
+            <option value="Garçon">Garçon (2 000 FCFA)</option>
             <option value="Fille">Fille (1 500 FCFA)</option>
           </select>
 
@@ -127,7 +126,7 @@
       <div class="toolbar">
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input id="search" type="search" placeholder="Rechercher par nom, prénom, téléphone, référence..." aria-label="Rechercher">
+          <input id="search" type="search" placeholder="Rechercher par prénom, téléphone, référence..." aria-label="Rechercher">
         </div>
 
         <div class="filters-row">
@@ -155,7 +154,7 @@
           <thead>
             <tr>
               <th>Dossard</th>
-              <th>Nom & Prénom</th>
+              <th>Prénom (Joueur)</th>
               <th>WhatsApp / Tél</th>
               <th>Équipe</th>
               <th>Maillot</th>

@@ -104,10 +104,10 @@ function afficher() {
     dossardSpan.textContent = `#${index + 1}`;
     tr.appendChild(cell(dossardSpan));
 
-    // Nom & Prénom
+    // Prénom du Joueur
     const nameCell = document.createElement("td");
     nameCell.className = "player-name-cell";
-    nameCell.textContent = `${i.nom.toUpperCase()} ${i.prenom}`;
+    nameCell.textContent = i.prenom ? i.prenom.toUpperCase() : (i.nom || "-");
     tr.appendChild(nameCell);
 
     // Téléphone avec lien WhatsApp direct
@@ -195,7 +195,7 @@ $("inscritsBody").addEventListener("click", async (event) => {
         body: JSON.stringify({ statut: nouveauStatut }),
       });
     } else if (btn.dataset.action === "delete") {
-      const nomComplet = `${inscrit.prenom} ${inscrit.nom}`;
+      const nomComplet = inscrit.prenom || inscrit.nom;
       if (!confirm(`Supprimer définitivement l'inscription de ${nomComplet} ?`)) {
         return;
       }
@@ -215,7 +215,7 @@ $("addForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const data = {
-    nom: $("nom").value.trim(),
+    nom: "",
     prenom: $("prenom").value.trim(),
     telephone: $("telephone").value.trim(),
     sexe: $("sexe").value,
@@ -262,7 +262,6 @@ $("exportBtn").addEventListener("click", () => {
 
   const entetes = [
     "Dossard",
-    "Nom",
     "Prénom",
     "Téléphone",
     "Catégorie",
@@ -276,8 +275,7 @@ $("exportBtn").addEventListener("click", () => {
   const lignes = inscrits.map((i, idx) =>
     [
       idx + 1,
-      i.nom,
-      i.prenom,
+      i.prenom || i.nom,
       i.telephone,
       i.sexe,
       i.taille,

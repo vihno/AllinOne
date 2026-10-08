@@ -97,7 +97,7 @@
         <div class="price-cards-row">
           <div class="price-badge-item boy-price">
             <span class="price-team">ÉQUIPE GARÇONS 👦</span>
-            <div class="price-amount">2 500 <small>FCFA</small></div>
+            <div class="price-amount">2 000 <small>FCFA</small></div>
             <span class="price-desc">Maillot officiel + Boissons + Match</span>
           </div>
 
@@ -146,7 +146,7 @@
           <div class="step-badge">2</div>
           <div class="step-content">
             <strong>Envoie le montant</strong>
-            <span>Transfère 2 500 ou 1 500 FCFA au <strong>70 07 21 41</strong>.</span>
+            <span>Transfère 2 000 ou 1 500 FCFA au <strong>70 07 21 41</strong>.</span>
           </div>
         </div>
 
@@ -201,7 +201,7 @@
                 <span class="jersey-mini-crest">⚽ VINHO FC</span>
               </div>
               <div class="jersey-flocking">
-                <div class="jersey-player-name" id="jerseyPreviewName">TON NOM</div>
+                <div class="jersey-player-name" id="jerseyPreviewName">TON PRÉNOM</div>
                 <div class="jersey-number" id="jerseyPreviewNumber">10</div>
               </div>
               <div class="jersey-bottom-tag">
@@ -210,28 +210,19 @@
             </div>
           </div>
         </div>
-        <p class="jersey-hint">💡 Remplis les champs ci-dessous pour voir ton maillot se floquer en direct !</p>
+        <p class="jersey-hint">💡 Remplis ton prénom ci-dessous pour voir ton maillot se floquer en direct !</p>
       </div>
 
       <!-- Formulaire -->
       <form id="registrationForm" class="football-form" novalidate>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="nom">Nom de famille *</label>
-            <div class="input-wrap">
-              <span class="input-icon">👤</span>
-              <input type="text" id="nom" name="nom" required placeholder="Ex : KOUDOU" autocomplete="family-name">
-            </div>
+        <div class="form-group">
+          <label for="prenom">Ton prénom *</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="prenom" name="prenom" required placeholder="Ex : Samuel, Alex, Eric..." autocomplete="given-name">
           </div>
-
-          <div class="form-group">
-            <label for="prenom">Prénom *</label>
-            <div class="input-wrap">
-              <span class="input-icon">👤</span>
-              <input type="text" id="prenom" name="prenom" required placeholder="Ex : Samuel" autocomplete="given-name">
-            </div>
-          </div>
+          <span class="input-helper">Ce prénom sera floqué au dos de ton maillot officiel.</span>
         </div>
 
         <div class="form-group">
@@ -250,7 +241,7 @@
               <span class="input-icon">🚻</span>
               <select id="sexe" name="sexe" required>
                 <option value="">Sélectionne ton équipe</option>
-                <option value="Garçon">Garçon (2 500 FCFA)</option>
+                <option value="Garçon">Garçon (2 000 FCFA)</option>
                 <option value="Fille">Fille (1 500 FCFA)</option>
               </select>
             </div>

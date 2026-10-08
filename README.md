@@ -7,8 +7,9 @@ Application web moderne développée avec **Flask (Python)** pour l'organisation
 ## 🌟 Fonctionnalités
 
 1. **Formulaire d'inscription interactif (`/`)** :
-   - Flocage en temps réel du maillot (nom du joueur, numéro, taille et coloris selon l'équipe).
-   - Choix de catégorie : Équipe Hommes (2 500 FCFA) / Équipe Dames (1 500 FCFA).
+   - Inscription simplifiée avec le prénom du joueur.
+   - Flocage en temps réel du maillot (prénom du joueur, numéro, taille et coloris selon l'équipe).
+   - Choix de catégorie : Équipe Hommes (2 000 FCFA) / Équipe Dames (1 500 FCFA).
    - Billetterie officielle et consignes TMoney avec copie en 1 clic du numéro (`70 07 21 41`).
    - Célébration (modal "But !") et transmission directe de la preuve sur WhatsApp.
 
