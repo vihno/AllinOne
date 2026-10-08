@@ -1,109 +1,228 @@
 "use strict";
 
 /* ==========================================================
-   VINHO – Formulaire d'inscription
-   1. Affiche le prix selon la catégorie
-   2. Enregistre l'inscription sur le serveur Flask
-   3. Ouvre WhatsApp avec le message déjà rédigé
+   VINHO FC – Formulaire d'inscription & Maillot Interactif
+   1. Prévisualisation en direct du flocage du maillot
+   2. Copie 1-clic du numéro TMoney
+   3. Validation et enregistrement sur l'API Flask
+   4. Célébration & transmission sur WhatsApp
    ========================================================== */
 
-// ⚠️ À MODIFIER : numéro WhatsApp de l'organisateur, avec l'indicatif, sans "+" ni espaces
-const WHATSAPP_NUMBER = "22890000000";
+let CONFIG = {
+  whatsapp_number: "22870072141",
+  tmoney_number: "70 07 21 41",
+  prix: { "Garçon": 2500, "Fille": 1500 }
+};
 
 const API_URL = "/api/inscriptions";
-const PRIX = { "Garçon": 2500, "Fille": 1500 };
 
+// Éléments du DOM
 const form = document.getElementById("registrationForm");
+const nomInput = document.getElementById("nom");
+const prenomInput = document.getElementById("prenom");
+const telInput = document.getElementById("telephone");
 const sexeSelect = document.getElementById("sexe");
-const selectedPrice = document.getElementById("selectedPrice");
-const successMessage = document.getElementById("successMessage");
-const submitBtn = form.querySelector('button[type="submit"]');
+const tailleSelect = document.getElementById("taille");
+const refInput = document.getElementById("reference");
+const submitBtn = document.getElementById("submitBtn");
+
+// Éléments du Maillot
+const jerseyObject = document.getElementById("jerseyObject");
+const jerseyName = document.getElementById("jerseyPreviewName");
+const jerseyTeamBadge = document.getElementById("jerseyTeamBadge");
+const jerseySizeBadge = document.getElementById("jerseyPreviewSizeBadge");
+
+// Prix
+const priceBanner = document.getElementById("selectedPrice");
+const priceBannerAmount = document.getElementById("priceBannerAmount");
+
+// TMoney
+const copyBtn = document.getElementById("copyTmoneyBtn");
+const copyToast = document.getElementById("copyToast");
+const tmoneyDisplay = document.getElementById("tmoneyDisplay");
+
+// Modal de célébration
+const successModal = document.getElementById("successModal");
+const modalWaBtn = document.getElementById("modalWaBtn");
+const modalCloseBtn = document.getElementById("modalCloseBtn");
+const passPlayerName = document.getElementById("passPlayerName");
+const passJerseyInfo = document.getElementById("passJerseyInfo");
+const passReference = document.getElementById("passReference");
+const passMontant = document.getElementById("passMontant");
+
+
+/* ---------- Initialisation de la configuration ---------- */
+
+async function chargerConfig() {
+  try {
+    const res = await fetch("/api/config");
+    if (res.ok) {
+      const data = await res.json();
+      CONFIG = { ...CONFIG, ...data };
+      if (tmoneyDisplay) {
+        tmoneyDisplay.textContent = CONFIG.tmoney_number;
+      }
+    }
+  } catch (e) {
+    // Utilisation des valeurs par défaut si hors-ligne
+  }
+}
+chargerConfig();
+
 
 /* ---------- Utilitaires ---------- */
 
 function formatFCFA(montant) {
-  return montant.toLocaleString("fr-FR") + " FCFA";
+  return Number(montant || 0).toLocaleString("fr-FR") + " FCFA";
 }
 
-// Accepte "90 00 00 00", "+228 90 00 00 00", "22890000000"... Renvoie 8 chiffres ou null
 function normalizePhone(raw) {
-  let digits = raw.replace(/\D/g, "");
+  let digits = (raw || "").replace(/\D/g, "");
   if (digits.startsWith("228") && digits.length === 11) {
     digits = digits.slice(3);
   }
   return digits.length === 8 ? digits : null;
 }
 
-function getFormData() {
-  return {
-    nom: document.getElementById("nom").value.trim(),
-    prenom: document.getElementById("prenom").value.trim(),
-    telephone: document.getElementById("telephone").value.trim(),
-    sexe: sexeSelect.value,
-    taille: document.getElementById("taille").value,
-    reference: document.getElementById("reference").value.trim(),
-  };
-}
-
 function buildWhatsAppUrl(data, montant) {
   const message = [
-    "⚽ *Inscription – Rencontre entre amis (Vinho)*",
-    "",
-    `👤 Nom : ${data.nom}`,
-    `👤 Prénom : ${data.prenom}`,
-    `📞 Téléphone : ${data.telephone}`,
-    `🚻 Catégorie : ${data.sexe}`,
-    `👕 Taille du maillot : ${data.taille}`,
-    `💳 Référence TMoney : ${data.reference}`,
-    `💰 Montant : ${formatFCFA(montant)}`,
+    "⚽ *INSCRIPTION OFFICIELLE – VINHO FC*",
+    "--------------------------------",
+    `👤 *Nom & Prénom :* ${data.nom.toUpperCase()} ${data.prenom}`,
+    `📞 *Téléphone :* ${data.telephone}`,
+    `🚻 *Équipe :* ${data.sexe}`,
+    `👕 *Taille Maillot :* ${data.taille}`,
+    `💳 *Réf. TMoney :* ${data.reference}`,
+    `💰 *Montant :* ${formatFCFA(montant)}`,
+    "--------------------------------",
+    "✅ _Paiement effectué. Merci de valider ma convocation pour le match !_"
   ].join("\n");
 
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${CONFIG.whatsapp_number}?text=${encodeURIComponent(message)}`;
 }
 
-function resetSubmitButton(label) {
-  submitBtn.disabled = false;
-  submitBtn.textContent = label;
+
+/* ---------- Prévisualisation interactive du Maillot ---------- */
+
+function updateJerseyFlocking() {
+  const nom = nomInput.value.trim().toUpperCase();
+  const prenom = prenomInput.value.trim();
+
+  if (nom || prenom) {
+    const initial = prenom ? `${prenom.charAt(0).toUpperCase()}. ` : "";
+    jerseyName.textContent = (initial + nom) || nom || "TON NOM";
+  } else {
+    jerseyName.textContent = "TON NOM";
+  }
 }
 
-/* ---------- Affichage du prix selon la catégorie ---------- */
+nomInput.addEventListener("input", updateJerseyFlocking);
+prenomInput.addEventListener("input", updateJerseyFlocking);
 
 sexeSelect.addEventListener("change", () => {
-  const montant = PRIX[sexeSelect.value];
+  const sexe = sexeSelect.value;
+  const montant = CONFIG.prix[sexe];
+
+  if (sexe === "Fille") {
+    jerseyObject.classList.add("jersey-girl");
+    jerseyTeamBadge.textContent = "VINHO AWAY KIT (DAMES)";
+  } else {
+    jerseyObject.classList.remove("jersey-girl");
+    jerseyTeamBadge.textContent = "VINHO HOME KIT (HOMMES)";
+  }
 
   if (montant) {
-    selectedPrice.textContent = `Montant à payer : ${formatFCFA(montant)}`;
-    selectedPrice.style.display = "block";
+    priceBannerAmount.textContent = formatFCFA(montant);
+    priceBanner.style.display = "flex";
   } else {
-    selectedPrice.style.display = "none";
+    priceBanner.style.display = "none";
   }
 });
 
-/* ---------- Envoi du formulaire ---------- */
+tailleSelect.addEventListener("change", () => {
+  const taille = tailleSelect.value || "M";
+  jerseySizeBadge.textContent = `TAILLE ${taille}`;
+});
+
+
+/* ---------- Copie 1-clic TMoney ---------- */
+
+if (copyBtn) {
+  copyBtn.addEventListener("click", async () => {
+    const num = (tmoneyDisplay ? tmoneyDisplay.textContent : CONFIG.tmoney_number).replace(/\s/g, "");
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(num);
+      } else {
+        // Fallback
+        const temp = document.createElement("input");
+        temp.value = num;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+      }
+      copyToast.classList.add("show");
+      document.getElementById("copyText").textContent = "Copié !";
+      setTimeout(() => {
+        copyToast.classList.remove("show");
+        document.getElementById("copyText").textContent = "Copier";
+      }, 3000);
+    } catch (err) {
+      alert(`Numéro TMoney : ${num}`);
+    }
+  });
+}
+
+
+/* ---------- Soumission du formulaire & Enregistrement ---------- */
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const data = getFormData();
-  const montant = PRIX[data.sexe];
+  const data = {
+    nom: nomInput.value.trim(),
+    prenom: prenomInput.value.trim(),
+    telephone: telInput.value.trim(),
+    sexe: sexeSelect.value,
+    taille: tailleSelect.value,
+    reference: refInput.value.trim()
+  };
 
-  const telephone = normalizePhone(data.telephone);
-  if (!telephone) {
-    alert("Numéro de téléphone invalide : il doit contenir 8 chiffres (ex : 90 00 00 00).");
-    document.getElementById("telephone").focus();
+  // Validation téléphone
+  const phoneNormalized = normalizePhone(data.telephone);
+  if (!phoneNormalized) {
+    alert("⚠️ Numéro de téléphone invalide : veuillez entrer un numéro togolais à 8 chiffres (ex : 90 00 00 00).");
+    telInput.focus();
     return;
   }
-  data.telephone = telephone;
+  data.telephone = phoneNormalized;
 
-  const originalLabel = submitBtn.textContent;
+  if (!data.sexe || !CONFIG.prix[data.sexe]) {
+    alert("⚠️ Veuillez sélectionner une catégorie (Garçon ou Fille).");
+    sexeSelect.focus();
+    return;
+  }
+
+  if (!data.taille) {
+    alert("⚠️ Veuillez choisir une taille pour votre maillot.");
+    tailleSelect.focus();
+    return;
+  }
+
+  if (data.reference.length < 4) {
+    alert("⚠️ Référence TMoney trop courte : veuillez vérifier votre SMS de confirmation.");
+    refInput.focus();
+    return;
+  }
+
+  const montant = CONFIG.prix[data.sexe];
+  const originalBtnHTML = submitBtn.innerHTML;
+
   submitBtn.disabled = true;
-  submitBtn.textContent = "Envoi en cours…";
+  submitBtn.innerHTML = `<span>⏳ Enregistrement du dossard en cours…</span>`;
 
-  // On ouvre l'onglet tout de suite : après un fetch, certains navigateurs
-  // mobiles bloquent l'ouverture d'une nouvelle fenêtre.
-  const waWindow = window.open("", "_blank");
-
-  let saved = false;
+  let registrationOk = false;
 
   try {
     const response = await fetch(API_URL, {
@@ -111,40 +230,58 @@ form.addEventListener("submit", async (event) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    const body = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({}));
 
-    // Erreur de saisie ou référence déjà utilisée : on s'arrête et on explique
-    if (response.status === 400 || response.status === 409) {
-      if (waWindow) waWindow.close();
-      alert(body.error || "Les informations saisies sont incorrectes.");
-      if (response.status === 409) document.getElementById("reference").focus();
-      resetSubmitButton(originalLabel);
+    if (response.status === 409) {
+      alert("⚠️ Cette référence TMoney a déjà été enregistrée par un autre joueur.");
+      refInput.focus();
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHTML;
       return;
     }
 
-    saved = response.ok;
+    if (!response.ok) {
+      alert(result.error || "Une erreur est survenue lors de l'enregistrement.");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHTML;
+      return;
+    }
+
+    registrationOk = true;
   } catch (error) {
-    console.error("Serveur injoignable :", error);
+    console.warn("Serveur non joignable, transmission directe vers WhatsApp :", error);
   }
 
-  // Dans tous les autres cas, on envoie quand même le message WhatsApp
-  const url = buildWhatsAppUrl(data, montant);
-  if (waWindow) {
-    waWindow.location.href = url;
-  } else {
-    window.location.href = url;
-  }
+  // Préparation du lien WhatsApp
+  const waUrl = buildWhatsAppUrl(data, montant);
 
-  if (!saved) {
-    alert(
-      "Le serveur n'a pas pu enregistrer ton inscription.\n" +
-      "Envoie quand même le message WhatsApp : l'organisation la saisira manuellement."
-    );
-  }
+  // Remplissage du pass de match dans la modal
+  passPlayerName.textContent = `${data.nom.toUpperCase()} ${data.prenom}`;
+  passJerseyInfo.textContent = `${data.taille} (${data.sexe})`;
+  passReference.textContent = data.reference;
+  passMontant.textContent = formatFCFA(montant);
+  modalWaBtn.href = waUrl;
 
+  // Affichage de la modal de célébration
+  successModal.classList.add("active");
+
+  // Tentative d'ouverture de l'onglet WhatsApp
+  window.open(waUrl, "_blank");
+
+  // Réinitialisation du bouton
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = originalBtnHTML;
+});
+
+
+/* ---------- Fermeture de la Modal de succès ---------- */
+
+modalCloseBtn.addEventListener("click", () => {
+  successModal.classList.remove("active");
   form.reset();
-  selectedPrice.style.display = "none";
-  successMessage.classList.add("show");
-  successMessage.scrollIntoView({ behavior: "smooth", block: "center" });
-  resetSubmitButton(originalLabel);
+  priceBanner.style.display = "none";
+  jerseyName.textContent = "TON NOM";
+  jerseySizeBadge.textContent = "TAILLE M";
+  jerseyObject.classList.remove("jersey-girl");
+  jerseyTeamBadge.textContent = "VINHO HOME KIT (HOMMES)";
 });

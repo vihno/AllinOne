@@ -3,97 +3,346 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel=stylesheet href="style.css">
-  
-  <title>Vinho – Rencontre entre amis</title>
-
+  <title>Vinho FC – Match Day & Rencontre Amicale ⚽</title>
+  <meta name="description" content="Inscris-toi pour le grand match de football Vinho. Maillot personnalisé inclus, bonne ambiance et 3ème mi-temps !">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
 </head>
 <body>
-<header>
-  <div class="logo">VINHO</div>
-  <p>Rencontre entre amis ⚽❤️</p>
-</header>
 
-<div class="container">
-  <div class="card">
-    <h2>🤝 Rencontre entre amis</h2>
-    <p class="intro">
-      Bienvenue à la rencontre organisée par <strong>Vinho</strong>.
-      Venez partager un bon moment entre amis autour du football,
-      de la bonne ambiance et du rafraîchissement.
-    </p>
-    <div class="price" id="priceDisplay">Garçons : 2 500 FCFA<br>Filles : 1 500 FCFA</div>
-    <p style="text-align:center">La participation comprend le <strong>maillot</strong> et le <strong>rafraîchissement</strong>.</p>
+  <!-- Ambiance Stade & En-tête -->
+  <header class="stadium-header">
+    <div class="floodlight floodlight-left"></div>
+    <div class="floodlight floodlight-right"></div>
+    <div class="pitch-marking pitch-circle"></div>
+    <div class="pitch-marking pitch-line"></div>
+
+    <div class="header-content">
+      <div class="badge-status">
+        <span class="status-dot"></span> Inscriptions Officielles • Places Limitées
+      </div>
+
+      <div class="club-crest">
+        <span class="crest-icon">⚽</span>
+        <span class="crest-name">VINHO FC</span>
+        <span class="crest-star">★ ★ ★</span>
+      </div>
+
+      <h1 class="match-title">MATCH DAY & RENCONTRE AMICALE</h1>
+      <p class="match-subtitle">Football • Convivialité • Maillot Officiel • 3ème Mi-temps festive 🔥</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Programme & Avantages du Match -->
+    <section class="card match-sheet-card">
+      <div class="card-header">
+        <span class="section-tag">📋 FEUILLE DE MATCH</span>
+        <h2>Bienvenue sur le terrain de Vinho</h2>
+      </div>
+
+      <p class="intro-text">
+        Prépare tes crampons ! Viens partager un moment inoubliable entre passionnés de football.
+        Que tu viennes pour le beau jeu ou pour l'ambiance, chaque participant repart avec son
+        <strong>maillot officiel floqué</strong> et profite du rafraîchissement d'après-match.
+      </p>
+
+      <div class="perks-grid">
+        <div class="perk-item">
+          <div class="perk-icon">👕</div>
+          <div class="perk-info">
+            <strong>Maillot Personnalisé</strong>
+            <span>Floquage à ton nom & taille au choix</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">🥤</div>
+          <div class="perk-info">
+            <strong>3ème Mi-temps</strong>
+            <span>Boissons fraîches & ambiance assurée</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">🏟️</div>
+          <div class="perk-info">
+            <strong>Grand Match</strong>
+            <span>Matchs amicaux & fair-play garanti</span>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">📸</div>
+          <div class="perk-info">
+            <strong>Souvenirs</strong>
+            <span>Photos d'équipe & moments forts</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Billet de Match & Tarifs -->
+    <section class="ticket-card">
+      <div class="ticket-stub">
+        <span class="ticket-badge">BILLETTERIE OFFICIELLE</span>
+        <div class="ticket-barcode">||| | |||| | ||| |||| | ||</div>
+        <span class="ticket-pass">PASS JOUEUR</span>
+      </div>
+
+      <div class="ticket-main">
+        <div class="ticket-heading">
+          <h3>Tarifs de Participation</h3>
+          <span class="all-inclusive-pill">Pack Tout-Inclus</span>
+        </div>
+
+        <div class="price-cards-row">
+          <div class="price-badge-item boy-price">
+            <span class="price-team">ÉQUIPE GARÇONS 👦</span>
+            <div class="price-amount">2 500 <small>FCFA</small></div>
+            <span class="price-desc">Maillot officiel + Boissons + Match</span>
+          </div>
+
+          <div class="price-badge-item girl-price">
+            <span class="price-team">ÉQUIPE FILLES 👧</span>
+            <div class="price-amount">1 500 <small>FCFA</small></div>
+            <span class="price-desc">Maillot officiel + Boissons + Match</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tableau Tactique de Paiement TMoney -->
+    <section class="card tmoney-card">
+      <div class="card-header">
+        <span class="section-tag section-tag-yellow">💳 PAIEMENT SÉCURISÉ TMONEY</span>
+        <h2>Règlement de la participation</h2>
+      </div>
+
+      <p class="tmoney-explain">
+        Effectue ton transfert via TMoney avant de valider la feuille d'engagement.
+      </p>
+
+      <div class="tmoney-board">
+        <div class="tmoney-tag">NUMÉRO OFFICIEL TMONEY (TOGO)</div>
+        <div class="tmoney-display">
+          <span class="tmoney-phone" id="tmoneyDisplay">70 07 21 41</span>
+          <button type="button" class="btn-copy" id="copyTmoneyBtn" title="Copier le numéro">
+            <span id="copyIcon">📋</span> <span id="copyText">Copier</span>
+          </button>
+        </div>
+        <div class="tmoney-toast" id="copyToast">Numéro copié dans le presse-papier ! ✅</div>
+      </div>
+
+      <!-- Étapes tactiques -->
+      <div class="tactical-steps">
+        <div class="step-box">
+          <div class="step-badge">1</div>
+          <div class="step-content">
+            <strong>Ouvre TMoney</strong>
+            <span>Compose <code>*145#</code> sur ton téléphone.</span>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-badge">2</div>
+          <div class="step-content">
+            <strong>Envoie le montant</strong>
+            <span>Transfère 2 500 ou 1 500 FCFA au <strong>70 07 21 41</strong>.</span>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-badge">3</div>
+          <div class="step-content">
+            <strong>Note la référence</strong>
+            <span>Conserve l'ID de transaction reçu par SMS.</span>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-badge">4</div>
+          <div class="step-content">
+            <strong>Valide ton inscription</strong>
+            <span>Remplis le formulaire et transmets la preuve sur WhatsApp.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="referee-warning">
+        <span class="card-icon">🟨</span>
+        <div>
+          <strong>Contrôle de l'arbitre :</strong> Chaque référence de paiement est vérifiée
+          par l'organisation avant la validation définitive de ton dossard.
+        </div>
+      </div>
+    </section>
+
+    <!-- Feuille d'engagement & Prévisualisation du Maillot -->
+    <section class="card form-card">
+      <div class="card-header">
+        <span class="section-tag section-tag-green">✍️ FEUILLE D'ENGAGEMENT</span>
+        <h2>Personnalise ton Maillot & Inscris-toi</h2>
+      </div>
+
+      <!-- Prévisualisation interactive du maillot floqué -->
+      <div class="jersey-preview-container">
+        <div class="jersey-preview-header">
+          <span>APERÇU EN DIRECT DU MAILLOT</span>
+          <span id="jerseyTeamBadge" class="jersey-team-pill">VINHO HOME KIT</span>
+        </div>
+
+        <div class="jersey-stage">
+          <div class="football-jersey" id="jerseyObject">
+            <div class="jersey-collar"></div>
+            <div class="jersey-sleeve jersey-sleeve-left"></div>
+            <div class="jersey-sleeve jersey-sleeve-right"></div>
+            <div class="jersey-body">
+              <div class="jersey-stripes"></div>
+              <div class="jersey-chest">
+                <span class="jersey-mini-crest">⚽ VINHO FC</span>
+              </div>
+              <div class="jersey-flocking">
+                <div class="jersey-player-name" id="jerseyPreviewName">TON NOM</div>
+                <div class="jersey-number" id="jerseyPreviewNumber">10</div>
+              </div>
+              <div class="jersey-bottom-tag">
+                <span id="jerseyPreviewSizeBadge">TAILLE M</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="jersey-hint">💡 Remplis les champs ci-dessous pour voir ton maillot se floquer en direct !</p>
+      </div>
+
+      <!-- Formulaire -->
+      <form id="registrationForm" class="football-form" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom de famille *</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="nom" name="nom" required placeholder="Ex : KOUDOU" autocomplete="family-name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="prenom" name="prenom" required placeholder="Ex : Samuel" autocomplete="given-name">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Numéro de téléphone WhatsApp *</label>
+          <div class="input-wrap">
+            <span class="input-icon">📞</span>
+            <input type="tel" id="telephone" name="telephone" required placeholder="Ex : 90 00 00 00 ou 70 07 21 41" autocomplete="tel">
+          </div>
+          <span class="input-helper">Numéro togolais à 8 chiffres (joignable sur WhatsApp).</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sexe">Catégorie de joueur *</label>
+            <div class="input-wrap select-wrap">
+              <span class="input-icon">🚻</span>
+              <select id="sexe" name="sexe" required>
+                <option value="">Sélectionne ton équipe</option>
+                <option value="Garçon">Garçon (2 500 FCFA)</option>
+                <option value="Fille">Fille (1 500 FCFA)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="taille">Taille du maillot *</label>
+            <div class="input-wrap select-wrap">
+              <span class="input-icon">👕</span>
+              <select id="taille" name="taille" required>
+                <option value="">Choisir une taille</option>
+                <option value="XS">XS – Extra Small</option>
+                <option value="S">S – Small</option>
+                <option value="M" selected>M – Medium (Standard)</option>
+                <option value="L">L – Large</option>
+                <option value="XL">XL – Extra Large</option>
+                <option value="XXL">XXL – Double Extra Large</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Récapitulatif du prix dynamique -->
+        <div class="price-banner" id="selectedPrice" style="display: none;">
+          <span class="price-banner-icon">💰</span>
+          <div>
+            <div class="price-banner-title" id="priceBannerTitle">Montant à régler</div>
+            <div class="price-banner-amount" id="priceBannerAmount">0 FCFA</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reference">Référence de paiement TMoney *</label>
+          <div class="input-wrap">
+            <span class="input-icon">💳</span>
+            <input type="text" id="reference" name="reference" required placeholder="Ex : 2026100800123" autocomplete="off">
+          </div>
+          <span class="input-helper">Référence ou ID reçu par SMS lors de ton transfert TMoney.</span>
+        </div>
+
+        <button type="submit" class="btn-stadium" id="submitBtn">
+          <span class="btn-stadium-icon">⚽</span>
+          <span class="btn-stadium-text">CONFIRMER MON INSCRIPTION & OUVRIR WHATSAPP</span>
+        </button>
+
+        <p class="form-notice">
+          ℹ️ Après avoir cliqué, WhatsApp s'ouvrira avec ta convocation préremplie.
+          Appuie simplement sur <strong>« Envoyer »</strong> dans WhatsApp pour finaliser !
+        </p>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Modal de confirmation festive (But marqué !) -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+      <div class="modal-confetti">🎉 ⚽ 🏆 🎊</div>
+      <h2 class="modal-title">BUUUUT ! INSCRIPTION PRÊTE !</h2>
+      <p class="modal-msg">
+        Ton maillot est réservé et tes informations ont été enregistrées.
+        Il ne te reste plus qu'à envoyer ton message de confirmation à l'arbitre sur WhatsApp.
+      </p>
+
+      <div class="modal-pass-card" id="modalPassCard">
+        <div class="pass-row"><span>Joueur :</span> <strong id="passPlayerName">-</strong></div>
+        <div class="pass-row"><span>Maillot :</span> <strong id="passJerseyInfo">-</strong></div>
+        <div class="pass-row"><span>Réf. TMoney :</span> <strong id="passReference">-</strong></div>
+        <div class="pass-row"><span>Montant :</span> <strong id="passMontant">-</strong></div>
+      </div>
+
+      <div class="modal-actions">
+        <a id="modalWaBtn" href="#" target="_blank" rel="noopener" class="btn-modal-wa">
+          📲 Ouvrir WhatsApp maintenant
+        </a>
+        <button type="button" class="btn-modal-close" id="modalCloseBtn">
+          Fermer / Ajouter un coéquipier
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>💳 Paiement TMoney</h2>
-    <p>Le montant dépend de ta catégorie : <strong>Garçons = 2 500 FCFA</strong> et <strong>Filles = 1 500 FCFA</strong>.<br><br>Effectue ton paiement après avoir choisi ta catégorie :</p>
-
-    <div class="tmoney">
-      <div>Numéro TMoney</div>
-      <div class="tmoney-number">70 07 21 41</div>
-      <div>TMoney</div>
+  <footer class="stadium-footer">
+    <div class="footer-logo">VINHO FOOTBALL CLUB</div>
+    <p>Passion du ballon rond • Esprit d'équipe • Amitié ❤️</p>
+    <div class="footer-links">
+      <span>© 2026 Vinho FC • Tous droits réservés</span>
+      <span class="footer-sep">•</span>
+      <a href="/dashboard">Espace Arbitre / Dashboard</a>
     </div>
+  </footer>
 
-    <div class="step"><div class="number">1</div><div>Ouvre ton service TMoney.</div></div>
-    <div class="step"><div class="number">2</div><div>Envoie le montant correspondant à ta catégorie au <strong>70 07 21 41</strong>.</div></div>
-    <div class="step"><div class="number">3</div><div>Après le paiement, récupère la <strong>référence de transaction</strong>.</div></div>
-    <div class="step"><div class="number">4</div><div>Remplis le formulaire ci-dessous et envoie ton inscription sur WhatsApp.</div></div>
-
-    <div class="warning">
-      ⚠️ Le paiement est vérifié manuellement par l'organisation.
-      Ton inscription sera considérée comme confirmée après vérification.
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>📝 Inscription</h2>
-
-    <form id="registrationForm">
-      <label for="nom">Nom *</label>
-      <input id="nom" required placeholder="Ton nom">
-
-      <label for="prenom">Prénom *</label>
-      <input id="prenom" required placeholder="Ton prénom">
-
-      <label for="telephone">Numéro de téléphone *</label>
-      <input id="telephone" type="tel" required placeholder="Ex : 90 00 00 00">
-
-      <label for="sexe">Catégorie *</label>
-      <select id="sexe" required>
-        <option value="">Choisir</option>
-        <option>Garçon</option>
-        <option>Fille</option>
-      </select>
-
-      <div id="selectedPrice" style="display:none;margin-top:15px;padding:14px;background:#ecfdf5;color:#166534;border-radius:10px;font-weight:bold;text-align:center;"></div>
-
-      <label for="taille">Taille du maillot *</label>
-      <select id="taille" required>
-        <option value="">Choisir une taille</option>
-        <option>XS</option><option>S</option><option>M</option>
-        <option>L</option><option>XL</option><option>XXL</option>
-      </select>
-
-      <label for="reference">Référence du paiement TMoney *</label>
-      <input id="reference" required placeholder="Référence reçue après le paiement">
-
-      <button type="submit">📲 Envoyer mon inscription sur WhatsApp</button>
-      <p class="small">Après le clic, WhatsApp s'ouvrira avec ton message d'inscription déjà préparé. Vérifie-le puis appuie sur « Envoyer ».</p>
-    </form>
-
-    <div class="success" id="successMessage">
-      <strong>🎉 Inscription préparée !</strong><br><br>
-      WhatsApp a été ouvert avec les informations de ton inscription.
-    </div>
-  </div>
-</div>
-
-<footer>
-  © 2026 Vinho – Rencontre entre amis<br>
-  Ensemble • Sport • Amitié ❤️
-</footer>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

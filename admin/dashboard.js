@@ -1,7 +1,8 @@
 "use strict";
 
 /* ==========================================================
-   VINHO – Dashboard des inscriptions
+   VINHO FC – DASHBOARD DU COACH / ADMIN
+   Gestion de l'effectif, suivi des paiements TMoney & export
    ========================================================== */
 
 const API_URL = "/api/inscriptions";
@@ -13,7 +14,7 @@ let inscrits = [];
 
 /* ---------- Utilitaires ---------- */
 
-const formatFCFA = (n) => n.toLocaleString("fr-FR");
+const formatFCFA = (n) => Number(n || 0).toLocaleString("fr-FR");
 
 async function api(url, options = {}) {
   const response = await fetch(url, {
@@ -27,51 +28,47 @@ async function api(url, options = {}) {
   return body;
 }
 
-// Crée une cellule avec du texte brut (textContent évite toute injection HTML)
-function cell(text) {
+function cell(content) {
   const td = document.createElement("td");
-  td.textContent = text;
+  if (typeof content === "string" || typeof content === "number") {
+    td.textContent = content;
+  } else if (content instanceof HTMLElement) {
+    td.appendChild(content);
+  }
   return td;
 }
 
-function actionButton(label, action, id, className) {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.textContent = label;
-  btn.dataset.action = action;
-  btn.dataset.id = id;
-  btn.className = className;
-  return btn;
-}
-
-/* ---------- Chargement ---------- */
+/* ---------- Chargement des données ---------- */
 
 async function charger() {
   try {
     inscrits = await api(API_URL);
     afficher();
   } catch (error) {
-    console.error(error);
+    console.error("Erreur de chargement de l'effectif :", error);
   }
 }
 
-/* ---------- Statistiques ---------- */
+/* ---------- Statistiques du Match ---------- */
 
 function majStats() {
   const confirmes = inscrits.filter((i) => i.statut === "confirme");
+  const garcons = inscrits.filter((i) => i.sexe === "Garçon");
+  const filles = inscrits.filter((i) => i.sexe === "Fille");
+  const montantTotal = confirmes.reduce((sum, i) => sum + (Number(i.montant) || 0), 0);
 
   $("statTotal").textContent = inscrits.length;
-  $("statGarcons").textContent = inscrits.filter((i) => i.sexe === "Garçon").length;
-  $("statFilles").textContent = inscrits.filter((i) => i.sexe === "Fille").length;
+  $("statGarcons").textContent = garcons.length;
+  $("statFilles").textContent = filles.length;
   $("statConfirmes").textContent = confirmes.length;
   $("statAttente").textContent = inscrits.length - confirmes.length;
-  $("statMontant").textContent = formatFCFA(confirmes.reduce((s, i) => s + i.montant, 0));
+  $("statMontant").innerHTML = `${formatFCFA(montantTotal)} <small>FCFA</small>`;
 }
 
-/* ---------- Tableau ---------- */
+/* ---------- Filtres et Recherche ---------- */
 
 function filtrer() {
-  const recherche = $("search").value.trim().toLowerCase();
+  const recherche = ($("search").value || "").trim().toLowerCase();
   const sexe = $("filterSexe").value;
   const statut = $("filterStatut").value;
 
@@ -80,12 +77,14 @@ function filtrer() {
     if (statut && i.statut !== statut) return false;
     if (!recherche) return true;
 
-    return [i.nom, i.prenom, i.telephone, i.reference]
+    return [i.nom, i.prenom, i.telephone, i.reference, i.taille]
       .join(" ")
       .toLowerCase()
       .includes(recherche);
   });
 }
+
+/* ---------- Affichage de la table des joueurs ---------- */
 
 function afficher() {
   majStats();
@@ -94,36 +93,80 @@ function afficher() {
   const tbody = $("inscritsBody");
   tbody.replaceChildren();
 
+  $("filteredCount").textContent = `${liste.length} joueur(s)`;
+
   liste.forEach((i, index) => {
     const tr = document.createElement("tr");
 
-    tr.append(
-      cell(index + 1),
-      cell(i.nom),
-      cell(i.prenom),
-      cell(i.telephone),
-      cell(i.sexe),
-      cell(i.taille),
-      cell(i.reference),
-      cell(formatFCFA(i.montant) + " FCFA")
-    );
+    // Dossard
+    const dossardSpan = document.createElement("span");
+    dossardSpan.className = "badge-dossard";
+    dossardSpan.textContent = `#${index + 1}`;
+    tr.appendChild(cell(dossardSpan));
+
+    // Nom & Prénom
+    const nameCell = document.createElement("td");
+    nameCell.className = "player-name-cell";
+    nameCell.textContent = `${i.nom.toUpperCase()} ${i.prenom}`;
+    tr.appendChild(nameCell);
+
+    // Téléphone avec lien WhatsApp direct
+    const telCell = document.createElement("td");
+    const waLink = document.createElement("a");
+    const cleanPhone = i.telephone.replace(/\D/g, "");
+    waLink.href = `https://wa.me/228${cleanPhone}`;
+    waLink.target = "_blank";
+    waLink.className = "link-wa";
+    waLink.innerHTML = `💬 <span>${i.telephone}</span>`;
+    telCell.appendChild(waLink);
+    tr.appendChild(telCell);
+
+    // Équipe / Catégorie
+    const teamBadge = document.createElement("span");
+    teamBadge.className = "badge-team";
+    teamBadge.textContent = i.sexe === "Garçon" ? "👦 Garçon" : "👧 Fille";
+    tr.appendChild(cell(teamBadge));
+
+    // Taille Maillot
+    const jerseyBadge = document.createElement("span");
+    jerseyBadge.className = "badge-jersey";
+    jerseyBadge.textContent = `Taille ${i.taille}`;
+    tr.appendChild(cell(jerseyBadge));
+
+    // Référence TMoney
+    tr.appendChild(cell(i.reference));
+
+    // Montant
+    tr.appendChild(cell(`${formatFCFA(i.montant)} FCFA`));
 
     // Statut
     const tdStatut = document.createElement("td");
-    const badge = document.createElement("span");
-    const confirme = i.statut === "confirme";
-    badge.className = `badge ${confirme ? "badge-confirme" : "badge-attente"}`;
-    badge.textContent = confirme ? "Confirmé" : "En attente";
-    tdStatut.appendChild(badge);
+    const statusBadge = document.createElement("span");
+    const isConfirme = i.statut === "confirme";
+    statusBadge.className = `badge-status ${isConfirme ? "badge-confirme" : "badge-attente"}`;
+    statusBadge.textContent = isConfirme ? "🟢 Titulaire" : "🟡 En attente";
+    tdStatut.appendChild(statusBadge);
     tr.appendChild(tdStatut);
 
-    // Actions
+    // Actions rapides
     const tdActions = document.createElement("td");
-    tdActions.className = "actions";
-    tdActions.append(
-      actionButton(confirme ? "Annuler" : "Confirmer", "toggle", i.id, "btn-toggle"),
-      actionButton("Supprimer", "delete", i.id, "btn-delete")
-    );
+    tdActions.className = "actions-cell";
+
+    const btnToggle = document.createElement("button");
+    btnToggle.type = "button";
+    btnToggle.className = `btn-action ${isConfirme ? "btn-toggle-cancel" : "btn-toggle-valid"}`;
+    btnToggle.textContent = isConfirme ? "Mettre en attente" : "Valider titulaire";
+    btnToggle.dataset.action = "toggle";
+    btnToggle.dataset.id = i.id;
+
+    const btnDelete = document.createElement("button");
+    btnDelete.type = "button";
+    btnDelete.className = "btn-action btn-delete";
+    btnDelete.textContent = "Supprimer";
+    btnDelete.dataset.action = "delete";
+    btnDelete.dataset.id = i.id;
+
+    tdActions.append(btnToggle, btnDelete);
     tr.appendChild(tdActions);
 
     tbody.appendChild(tr);
@@ -133,7 +176,7 @@ function afficher() {
   $("inscritsTable").style.display = liste.length ? "" : "none";
 }
 
-/* ---------- Actions : confirmer / supprimer ---------- */
+/* ---------- Gestion des actions (Confirmer / Supprimer) ---------- */
 
 $("inscritsBody").addEventListener("click", async (event) => {
   const btn = event.target.closest("button[data-action]");
@@ -145,72 +188,114 @@ $("inscritsBody").addEventListener("click", async (event) => {
 
   try {
     if (btn.dataset.action === "toggle") {
-      const statut = inscrit.statut === "confirme" ? "attente" : "confirme";
-      await api(`${API_URL}/${id}`, { method: "PATCH", body: JSON.stringify({ statut }) });
+      const nouveauStatut = inscrit.statut === "confirme" ? "attente" : "confirme";
+      btn.disabled = true;
+      await api(`${API_URL}/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ statut: nouveauStatut }),
+      });
     } else if (btn.dataset.action === "delete") {
-      if (!confirm(`Supprimer l'inscription de ${inscrit.prenom} ${inscrit.nom} ?`)) return;
+      const nomComplet = `${inscrit.prenom} ${inscrit.nom}`;
+      if (!confirm(`Supprimer définitivement l'inscription de ${nomComplet} ?`)) {
+        return;
+      }
+      btn.disabled = true;
       await api(`${API_URL}/${id}`, { method: "DELETE" });
     }
     await charger();
   } catch (error) {
     alert(error.message);
+    btn.disabled = false;
   }
 });
 
-/* ---------- Ajout manuel ---------- */
+/* ---------- Ajout manuel d'un joueur ---------- */
 
 $("addForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const data = {
-    nom: $("nom").value,
-    prenom: $("prenom").value,
-    telephone: $("telephone").value,
+    nom: $("nom").value.trim(),
+    prenom: $("prenom").value.trim(),
+    telephone: $("telephone").value.trim(),
     sexe: $("sexe").value,
     taille: $("taille").value,
-    reference: $("reference").value,
+    reference: $("reference").value.trim(),
   };
 
+  const submitButton = event.target.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+
   try {
-    await api(API_URL, { method: "POST", body: JSON.stringify(data) });
+    await api(API_URL, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
     event.target.reset();
     await charger();
   } catch (error) {
     alert(error.message);
+  } finally {
+    submitButton.disabled = false;
   }
 });
 
-/* ---------- Recherche et filtres ---------- */
+/* ---------- Événements de recherche et filtres ---------- */
 
 ["search", "filterSexe", "filterStatut"].forEach((id) => {
   $(id).addEventListener("input", afficher);
 });
 
-/* ---------- Export CSV (lisible directement dans Excel) ---------- */
+/* ---------- Export CSV pour Excel (BOM UTF-8 et point-virgule) ---------- */
 
 function csvCell(value) {
   let text = String(value ?? "");
-  // Empêche l'exécution de formules si le fichier est ouvert dans Excel
   if (/^[=+\-@]/.test(text)) text = "'" + text;
   return `"${text.replace(/"/g, '""')}"`;
 }
 
 $("exportBtn").addEventListener("click", () => {
-  const entetes = ["Nom", "Prénom", "Téléphone", "Catégorie", "Taille", "Référence", "Montant", "Statut", "Date"];
+  if (!inscrits.length) {
+    alert("Aucune inscription à exporter.");
+    return;
+  }
 
-  const lignes = inscrits.map((i) =>
-    [i.nom, i.prenom, i.telephone, i.sexe, i.taille, i.reference, i.montant, i.statut, i.created_at]
+  const entetes = [
+    "Dossard",
+    "Nom",
+    "Prénom",
+    "Téléphone",
+    "Catégorie",
+    "Taille Maillot",
+    "Réf. TMoney",
+    "Montant (FCFA)",
+    "Statut",
+    "Date d'inscription"
+  ];
+
+  const lignes = inscrits.map((i, idx) =>
+    [
+      idx + 1,
+      i.nom,
+      i.prenom,
+      i.telephone,
+      i.sexe,
+      i.taille,
+      i.reference,
+      i.montant,
+      i.statut === "confirme" ? "Confirmé" : "En attente",
+      i.created_at
+    ]
       .map(csvCell)
       .join(";")
   );
 
-  // BOM + séparateur ";" pour un affichage correct des accents dans Excel (FR)
   const contenu = "\uFEFF" + [entetes.map(csvCell).join(";"), ...lignes].join("\r\n");
   const blob = new Blob([contenu], { type: "text/csv;charset=utf-8" });
 
   const lien = document.createElement("a");
   lien.href = URL.createObjectURL(blob);
-  lien.download = "inscriptions-vinho.csv";
+  lien.download = `feuille-de-match-vinho-${new Date().toISOString().slice(0, 10)}.csv`;
   lien.click();
   URL.revokeObjectURL(lien.href);
 });

@@ -4,125 +4,181 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Dashboard – Vinho</title>
+  <title>Banc de Touche – Vinho FC Dashboard ⚽</title>
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
 </head>
 <body>
 
-  <!-- En-tête -->
+  <!-- Barre supérieure du coach -->
   <header class="topbar">
-    <div class="logo">VINHO</div>
-    <h1>Dashboard des inscriptions</h1>
+    <div class="topbar-brand">
+      <div class="logo">VINHO FC</div>
+      <div class="topbar-title">
+        <h1>Banc de Touche & Feuille de Match</h1>
+        <span class="live-pill">● Session Live Arbitre</span>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <a href="/" class="btn-link-site" target="_blank" title="Ouvrir le formulaire public">
+        🏟️ Voir le formulaire public ↗
+      </a>
+    </div>
   </header>
 
   <main class="container">
 
-    <!-- Statistiques -->
-    <section class="stats" aria-label="Statistiques">
-      <div class="stat-card">
-        <span class="stat-label">Total inscrits</span>
-        <span class="stat-value" id="statTotal">0</span>
+    <!-- Tableau de bord tactique : Statistiques du match -->
+    <section class="stats" aria-label="Statistiques du match">
+      <div class="stat-card stat-total">
+        <span class="stat-icon">👥</span>
+        <div class="stat-meta">
+          <span class="stat-label">Effectif Convoqué</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
       </div>
+
       <div class="stat-card">
-        <span class="stat-label">Garçons</span>
-        <span class="stat-value" id="statGarcons">0</span>
+        <span class="stat-icon">👦</span>
+        <div class="stat-meta">
+          <span class="stat-label">Équipe Hommes</span>
+          <span class="stat-value" id="statGarcons">0</span>
+        </div>
       </div>
+
       <div class="stat-card">
-        <span class="stat-label">Filles</span>
-        <span class="stat-value" id="statFilles">0</span>
+        <span class="stat-icon">👧</span>
+        <div class="stat-meta">
+          <span class="stat-label">Équipe Dames</span>
+          <span class="stat-value" id="statFilles">0</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <span class="stat-label">Paiements confirmés</span>
-        <span class="stat-value" id="statConfirmes">0</span>
+
+      <div class="stat-card stat-confirmed">
+        <span class="stat-icon">🟢</span>
+        <div class="stat-meta">
+          <span class="stat-label">Titulaires Validés</span>
+          <span class="stat-value" id="statConfirmes">0</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <span class="stat-label">En attente</span>
-        <span class="stat-value" id="statAttente">0</span>
+
+      <div class="stat-card stat-pending">
+        <span class="stat-icon">🟡</span>
+        <div class="stat-meta">
+          <span class="stat-label">Sur le Banc (En Attente)</span>
+          <span class="stat-value" id="statAttente">0</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <span class="stat-label">Total encaissé (FCFA)</span>
-        <span class="stat-value" id="statMontant">0</span>
+
+      <div class="stat-card stat-caisse">
+        <span class="stat-icon">💰</span>
+        <div class="stat-meta">
+          <span class="stat-label">Cagnotte Validée</span>
+          <span class="stat-value" id="statMontant">0 <small>FCFA</small></span>
+        </div>
       </div>
     </section>
 
-    <!-- Ajout manuel d'une inscription -->
-    <section class="card">
-      <h2>➕ Ajouter une inscription</h2>
-      <form id="addForm">
-        <input id="nom" placeholder="Nom" aria-label="Nom" autocomplete="off" required>
-        <input id="prenom" placeholder="Prénom" aria-label="Prénom" autocomplete="off" required>
-        <input id="telephone" type="tel" placeholder="Téléphone (8 chiffres)" aria-label="Téléphone" autocomplete="off" required>
+    <!-- Ajout manuel d'un joueur -->
+    <section class="card add-player-card">
+      <div class="card-heading">
+        <h2>➕ Inscrire un joueur manuellement</h2>
+        <span class="badge-coach">Fiche Arbitre</span>
+      </div>
 
-        <select id="sexe" aria-label="Catégorie" required>
-          <option value="">Catégorie</option>
-          <option>Garçon</option>
-          <option>Fille</option>
-        </select>
+      <form id="addForm" class="add-player-form">
+        <div class="form-grid">
+          <input id="nom" placeholder="Nom de famille" aria-label="Nom" autocomplete="off" required>
+          <input id="prenom" placeholder="Prénom" aria-label="Prénom" autocomplete="off" required>
+          <input id="telephone" type="tel" placeholder="Téléphone (8 chiffres)" aria-label="Téléphone" autocomplete="off" required>
 
-        <select id="taille" aria-label="Taille du maillot" required>
-          <option value="">Taille</option>
-          <option>XS</option><option>S</option><option>M</option>
-          <option>L</option><option>XL</option><option>XXL</option>
-        </select>
+          <select id="sexe" aria-label="Catégorie" required>
+            <option value="">Sélectionner Catégorie</option>
+            <option value="Garçon">Garçon (2 500 FCFA)</option>
+            <option value="Fille">Fille (1 500 FCFA)</option>
+          </select>
 
-        <input id="reference" placeholder="Référence TMoney" aria-label="Référence TMoney" autocomplete="off" required>
+          <select id="taille" aria-label="Taille du maillot" required>
+            <option value="">Taille Maillot</option>
+            <option>XS</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+            <option>XXL</option>
+          </select>
 
-        <button type="submit">Ajouter</button>
+          <input id="reference" placeholder="Référence TMoney" aria-label="Référence TMoney" autocomplete="off" required>
+        </div>
+
+        <button type="submit" class="btn-add">⚽ Ajouter à l'effectif</button>
       </form>
     </section>
 
-    <!-- Liste des inscriptions -->
-    <section class="card">
-      <h2>📋 Liste des inscrits</h2>
-
-      <!-- Recherche et filtres -->
-      <div class="toolbar">
-        <input id="search" type="search" placeholder="🔍 Rechercher (nom, téléphone, référence...)" aria-label="Rechercher">
-
-        <select id="filterSexe" aria-label="Filtrer par catégorie">
-          <option value="">Toutes catégories</option>
-          <option>Garçon</option>
-          <option>Fille</option>
-        </select>
-
-        <select id="filterStatut" aria-label="Filtrer par statut">
-          <option value="">Tous statuts</option>
-          <option value="attente">En attente</option>
-          <option value="confirme">Confirmé</option>
-        </select>
-
-        <button id="exportBtn" type="button">📥 Exporter CSV</button>
+    <!-- Liste des joueurs engagés -->
+    <section class="card roster-card">
+      <div class="card-heading">
+        <h2>📋 Roster des Joueurs & Suivi des Paiements</h2>
+        <span class="roster-count" id="filteredCount">0 joueur(s)</span>
       </div>
 
-      <!-- Tableau -->
+      <!-- Barre d'outils, Recherche & Filtres -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input id="search" type="search" placeholder="Rechercher par nom, prénom, téléphone, référence..." aria-label="Rechercher">
+        </div>
+
+        <div class="filters-row">
+          <select id="filterSexe" aria-label="Filtrer par catégorie">
+            <option value="">Toutes les équipes</option>
+            <option value="Garçon">Garçons uniquement</option>
+            <option value="Fille">Filles uniquement</option>
+          </select>
+
+          <select id="filterStatut" aria-label="Filtrer par statut">
+            <option value="">Tous les statuts</option>
+            <option value="confirme">Titulaires confirmés 🟢</option>
+            <option value="attente">En attente de paiement 🟡</option>
+          </select>
+
+          <button id="exportBtn" type="button" class="btn-export">
+            📥 Exporter vers Excel (CSV)
+          </button>
+        </div>
+      </div>
+
+      <!-- Tableau des inscriptions -->
       <div class="table-wrapper">
         <table id="inscritsTable">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Téléphone</th>
-              <th>Catégorie</th>
-              <th>Taille</th>
-              <th>Référence</th>
+              <th>Dossard</th>
+              <th>Nom & Prénom</th>
+              <th>WhatsApp / Tél</th>
+              <th>Équipe</th>
+              <th>Maillot</th>
+              <th>Réf. TMoney</th>
               <th>Montant</th>
-              <th>Statut</th>
-              <th>Actions</th>
+              <th>Statut Paiement</th>
+              <th>Actions Arbitre</th>
             </tr>
           </thead>
           <tbody id="inscritsBody">
-            <!-- Les lignes sont générées par dashboard.js -->
+            <!-- Rempli dynamiquement par dashboard.js -->
           </tbody>
         </table>
       </div>
 
-      <p id="emptyMessage" class="empty">Aucune inscription pour le moment.</p>
+      <p id="emptyMessage" class="empty">Aucun joueur ne correspond aux filtres ou aucune inscription pour le moment.</p>
     </section>
 
   </main>
 
-  <footer>© 2026 Vinho – Dashboard</footer>
+  <footer class="dashboard-footer">
+    © 2026 Vinho FC – Tableau de bord de l'organisation • Tous droits réservés
+  </footer>
 
   <script src="dashboard.js"></script>
 </body>
